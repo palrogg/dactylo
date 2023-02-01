@@ -114,7 +114,7 @@ export class KeyboardComponent {
       },
       {
         key: 'KeyY',
-        text: 'Y',
+        text: 'Z',
         class: 'default',
       },
       {
@@ -228,7 +228,7 @@ export class KeyboardComponent {
       },
       {
         key: 'KeyZ',
-        text: 'Z',
+        text: 'Y',
         class: 'default',
       },
       {
