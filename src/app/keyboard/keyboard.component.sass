@@ -1,0 +1,41 @@
+.keyboard
+    width: 80%
+    max-width: 34rem
+    margin: auto
+    text-align: center
+
+    div.row
+
+        display: flex
+        flex-direction: row
+        justify-content: space-between // stretch?
+        row-gap: 10px
+
+        div
+            border: 2px solid #555555
+            margin: 2px
+            padding: 0.3rem 0
+            border-radius: 5px
+            width: 2rem
+            // height: 2rem
+            display: inline-block
+            // display: flex
+            // justify-content: center
+            // align-items: center
+            // width: 2rem
+            // flex-direction: row
+
+            &.one-and-a-half
+                width: 3rem
+            &.double
+                width: 4rem
+            &.shiftleft
+                width: 4.1rem
+            &.shiftright
+                width: 6em
+            &.space
+                width: 20rem
+
+            &.active
+                background: #555
+                color: #eee

@@ -1,0 +1,8 @@
+<div id="stats" class="ui component">
+    <mat-chip-set>
+        <mat-chip class="stat" *ngFor="let stat of stats">
+            {{stat.text}}: <b>{{stat.value}}</b>{{stat.suffix}}
+        </mat-chip>
+    </mat-chip-set>
+    <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+</div>
