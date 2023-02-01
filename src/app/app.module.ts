@@ -15,7 +15,6 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TextComponent } from './text/text.component';
-import { SplitcharPipe } from './splitchar.pipe';
 import { KeyboardComponent } from './keyboard/keyboard.component';
 import { StatsComponent } from './stats/stats.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
@@ -24,7 +23,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   declarations: [
     AppComponent,
     TextComponent,
-    SplitcharPipe,
     KeyboardComponent,
     StatsComponent,
     ToolbarComponent,
