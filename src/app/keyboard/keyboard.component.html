@@ -2,4 +2,5 @@
     <div class="row" *ngFor="let row of keyRows">
         <div *ngFor="let key of row" [ngClass]="key.text === currentKey ? key.class + ' active': key.class">{{key.text}}</div>
     </div>
+    <button (click)="this.addAnimal('yol')">Clic</button>
 </div>
