@@ -1,6 +1,23 @@
 # Dactylo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.2.
+Projet d’outil d’entraînement à la dactylographie sur clavier romand.
+
+## Écran de départ
+
+* infos sur les performances: vitesse (lettres/minute), précision (%), nombre d’erreurs, [position par rapport aux autres utilisateurs]
+* texte à entrer, curseur indiquant la progression
+* clavier suisse-romand
+
+## Étapes du projet
+[ ] Prototype: l’utilisatrice ou utilisateur peut s’entraîner avec un seul texte prédéfini
+[ ] Elle ou il peut s’entraîner avec plusieurs textes et combinaisons de touches à choix
+[ ] Elle ou il peut charger son propre texte d’entraînement
+[ ] Sauvegarde de la progression en ligne
+[ ] Mode multijoueur avec Colyseus ou sockets
+[ ] Éventuellement: adaptation aux claviers français, belge, français canadien, bépo
+
+
+———
 
 ## Development server
 
