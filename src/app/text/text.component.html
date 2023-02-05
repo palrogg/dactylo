@@ -5,4 +5,7 @@
             *ngFor="let character of characters; let i = index"><span class='cursor'
                 *ngIf="i===characterIndex"></span>{{character}}<span *ngIf="character==='␣'"><wbr></span></span>
     </p>
+    <p class="text-meta">
+        <span class="author">{{text.author}}</span>, <span class="book">{{text.book}}</span>, <span class="year">{{text.year}}</span>
+    </p>
 </div>

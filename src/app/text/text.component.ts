@@ -11,32 +11,40 @@ import texts from './texts.json';
 })
 export class TextComponent {
   constructor(private store: Store) {}
+  sentenceIndex = 0;
   characterIndex = 0;
 
-  text = texts[0].sentences[0];
+  text = texts[0];
+  currentSentence = this.text.sentences[0];
   typedText = '';
-
-  splittedText = this.text.split(' ');
-  characters = this.text.replace(/ /g, '␣').split('');
+  characters = this.currentSentence.replace(/ /g, '␣').split('');
   currentDiacriticCode: number | null = null;
   wrongCharacters: Array<number> = [];
   errorCount = 0;
 
+  loadSentence(index: number): void {
+    this.currentSentence = this.text.sentences[index];
+    this.characterIndex = 0;
+    this.typedText = '';
+    this.characters = this.currentSentence.replace(/ /g, '␣').split('');
+  }
   rightKey(): void {
     this.characterIndex += 1;
     this.store.dispatch([
       new SendKeyCount(this.characterIndex),
-      new ShowKey(this.text[this.characterIndex]),
+      new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
+    if (this.characterIndex >= this.characters.length) {
+      this.sentenceIndex++;
+      this.loadSentence(this.sentenceIndex);
+    }
   }
 
   wrongKey(): void {
-    console.log('NOPE');
     if (!this.wrongCharacters.includes(this.characterIndex)) {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
-    // console.log(this.errorCount);
     this.store.dispatch(new AddError('u'));
   }
 
@@ -47,7 +55,7 @@ export class TextComponent {
       this.currentDiacriticCode
     );
     if (
-      this.text[this.characterIndex].normalize('NFD') ===
+      this.currentSentence[this.characterIndex].normalize('NFD') ===
       combine.normalize('NFD')
     ) {
       this.rightKey();
@@ -64,8 +72,8 @@ export class TextComponent {
       event.preventDefault();
     }
     if (
-      event.key === this.text[this.characterIndex] ||
-      (this.text[this.characterIndex] === '’' && event.key === "'")
+      event.key === this.currentSentence[this.characterIndex] ||
+      (this.currentSentence[this.characterIndex] === '’' && event.key === "'")
     ) {
       this.rightKey();
     } else if (event.key === 'Dead') {
