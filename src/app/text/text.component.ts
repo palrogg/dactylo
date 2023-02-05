@@ -1,7 +1,8 @@
 import { HostListener, Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-
-import { sendKeyCount } from '../state/user.actions'
+import { ShowKey } from '../state/keyboard.actions'; // SendKeyCount
+import { SendKeyCount, AddError } from '../state/text.actions';
+import texts from './texts.json';
 
 @Component({
   selector: 'app-text',
@@ -12,7 +13,7 @@ export class TextComponent {
   constructor(private store: Store) {}
   characterIndex = 0;
 
-  text = `La Comtesse de *** me prit sans m’aimer, continua Damon : elle me trompa. Je me fâchai, elle me quitta : cela était dans l’ordre.`;
+  text = texts[0].sentences[0];
   typedText = '';
 
   splittedText = this.text.split(' ');
@@ -23,7 +24,10 @@ export class TextComponent {
 
   rightKey(): void {
     this.characterIndex += 1;
-    this.store.dispatch(new sendKeyCount(this.characterIndex));
+    this.store.dispatch([
+      new SendKeyCount(this.characterIndex),
+      new ShowKey(this.text[this.characterIndex]),
+    ]);
   }
 
   wrongKey(): void {
@@ -32,14 +36,31 @@ export class TextComponent {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
-    console.log(this.errorCount)
+    // console.log(this.errorCount);
+    this.store.dispatch(new AddError('u'));
+  }
+
+  testDiacritic(event: KeyboardEvent): void {
+    if (!this.currentDiacriticCode) return;
+    const combine = String.fromCharCode(
+      event.key.charCodeAt(0),
+      this.currentDiacriticCode
+    );
+    if (
+      this.text[this.characterIndex].normalize('NFD') ===
+      combine.normalize('NFD')
+    ) {
+      this.rightKey();
+    } else {
+      this.wrongKey();
+    }
+    this.currentDiacriticCode = null;
   }
 
   @HostListener('document:keydown', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
-    
-
     if (event.code === 'Space') {
+      // Prevent scrolldown
       event.preventDefault();
     }
     if (
@@ -53,25 +74,10 @@ export class TextComponent {
         this.currentDiacriticCode = event.shiftKey ? 768 : 770; // ` vs ^
       }
     } else if (this.currentDiacriticCode) {
-      const combine = String.fromCharCode(
-        event.key.charCodeAt(0),
-        this.currentDiacriticCode
-      );
-      if (
-        this.text[this.characterIndex].normalize('NFD') ===
-        combine.normalize('NFD')
-      ) {
-        this.rightKey();
-      } else {
-        this.wrongKey();
-      }
-      this.currentDiacriticCode = null;
+      this.testDiacritic(event);
     } else if (
-      ['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab'].includes(event.key)
+      !['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab'].includes(event.key)
     ) {
-      // Modifier; ignore.
-      console.log('modifier');
-    } else {
       console.log(event);
       console.log(event.key);
       this.wrongKey();
