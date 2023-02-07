@@ -19,6 +19,9 @@ import { KeyboardComponent } from './keyboard/keyboard.component';
 import { StatsComponent } from './stats/stats.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
+import { ZooState } from './state/zoo.state';
+import { StatsState } from './state/stats.state'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +39,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatChipsModule,
     MatToolbarModule,
     // Store
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot([ZooState, StatsState]),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
   ],

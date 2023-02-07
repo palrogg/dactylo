@@ -1,4 +1,7 @@
 <div id="stats" class="ui component">
+    <div>
+        <p>Test Erreurs: {{errors$ | async}}</p>
+    </div>
     <mat-chip-set>
         <mat-chip class="stat" *ngFor="let stat of stats">
             {{stat.text}}: <b>{{stat.value}}</b>{{stat.suffix}}

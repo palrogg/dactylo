@@ -1,7 +1,8 @@
 import { HostListener, Component } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ShowKey } from '../state/keyboard.actions'; // SendKeyCount
-import { SendKeyCount, AddError } from '../state/text.actions';
+// import { SendKeyCount, AddError } from '../state/text.actions';
+import { SendKey } from '../state/stats.state';
 import texts from './texts.json';
 
 @Component({
@@ -31,7 +32,7 @@ export class TextComponent {
   rightKey(): void {
     this.characterIndex += 1;
     this.store.dispatch([
-      new SendKeyCount(this.characterIndex),
+      // new SendKeyCount(this.characterIndex),
       new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
     if (this.characterIndex >= this.characters.length) {
@@ -45,7 +46,9 @@ export class TextComponent {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
-    this.store.dispatch(new AddError('u'));
+    // this.store.dispatch(new AddError('u'));
+    this.store.dispatch([new SendKey()]);
+
   }
 
   testDiacritic(event: KeyboardEvent): void {
@@ -86,8 +89,8 @@ export class TextComponent {
     } else if (
       !['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab'].includes(event.key)
     ) {
-      console.log(event);
-      console.log(event.key);
+      // console.log(event);
+      // console.log(event.key);
       this.wrongKey();
     }
   }

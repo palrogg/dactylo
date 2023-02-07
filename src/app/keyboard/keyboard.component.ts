@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { AddAnimal } from '../state/animal.actions'; // SendKeyCount
+import { Store, Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { withLatestFrom } from 'rxjs/operators';
+import { SendKey } from '../state/stats.state';
+import { FeedAnimals } from '../state/zoo.state';
+
 import keys from './keyboard.json';
 
 @Component({
@@ -9,14 +13,23 @@ import keys from './keyboard.json';
   styleUrls: ['./keyboard.component.sass'],
 })
 export class KeyboardComponent {
-  constructor(private store: Store) {}
-
+  // @Select(state => state.animals) animals$: Observable<any>;
   currentKey = 'J';
 
   keyRows = keys;
 
+  constructor(private store: Store) {}
+
   addAnimal(name: string) {
-    console.log('test')
-    this.store.dispatch(new AddAnimal(name));
+    console.log('test');
+    this.store.dispatch([new FeedAnimals()]);
+    // .subscribe(() => console.log("SUSCRIBE"));
+    // .pipe(withLatestFrom(this.animals$))
+    // .subscribe(([_, animals]) => {
+    //   // do something with animals
+    //   console.group('ANIMALS');
+    //   console.log(animals);
+    //   console.groupEnd();
+    // });
   }
 }
