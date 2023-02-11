@@ -25,6 +25,10 @@ export class TextComponent {
   wrongCharacters: Array<number> = [];
   errorCount = 0;
 
+  constructor(private store: Store) {
+    this.loadSentence(0);
+  }
+
   loadSentence(index: number): void {
     this.currentSentence = this.text.sentences[index];
     this.characterIndex = 0;
@@ -32,10 +36,8 @@ export class TextComponent {
     this.characters = this.currentSentence.replace(/ /g, '␣').split('');
     this.store.dispatch([new SetStartTime()]);
   }
-  constructor(private store: Store) {
-    this.loadSentence(0);
-  }
-  rightKey(): void {
+
+  correctKey(): void {
     this.characterIndex += 1;
     this.store.dispatch([
       new SendCorrectKey(),
@@ -65,7 +67,7 @@ export class TextComponent {
       this.currentSentence[this.characterIndex].normalize('NFD') ===
       combine.normalize('NFD')
     ) {
-      this.rightKey();
+      this.correctKey();
     } else {
       this.wrongKey();
     }
@@ -82,7 +84,7 @@ export class TextComponent {
       event.key === this.currentSentence[this.characterIndex] ||
       (this.currentSentence[this.characterIndex] === '’' && event.key === "'")
     ) {
-      this.rightKey();
+      this.correctKey();
     } else if (event.key === 'Dead') {
       // Diacritic ^/` on chfr keyboards
       if (event.code === 'Equal') {
@@ -93,8 +95,6 @@ export class TextComponent {
     } else if (
       !['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab'].includes(event.key)
     ) {
-      // console.log(event);
-      // console.log(event.key);
       this.wrongKey();
     }
   }
