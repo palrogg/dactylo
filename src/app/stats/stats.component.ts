@@ -44,12 +44,6 @@ export class StatsComponent {
         value: this.accuracy$,
         suffix: '%',
       },
-      {
-        name: 'count',
-        text: 'Caractères entrés',
-        value: this.charCount$,
-        suffix: '',
-      },
     ];
   }
 }
