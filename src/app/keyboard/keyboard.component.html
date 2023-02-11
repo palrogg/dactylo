@@ -1,6 +1,7 @@
 <div class="keyboard ui component">
+    <div>Key: {{currentKey$ | async}} </div>
     <div class="row" *ngFor="let row of keyRows">
-        <div *ngFor="let key of row" [ngClass]="key.text === currentKey ? key.class + ' active': key.class">{{key.text}}
+        <div *ngFor="let key of row" [ngClass]="key.text === highlightKey ? key.class + ' active': key.class">{{key.text}}
         </div>
     </div>
 </div>

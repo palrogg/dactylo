@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { withLatestFrom } from 'rxjs/operators';
-import { SendWrongKey } from '../state/stats.state';
-import { FeedAnimals } from '../state/zoo.state';
-
 import keys from './keyboard.json';
 
 @Component({
@@ -13,10 +9,18 @@ import keys from './keyboard.json';
   styleUrls: ['./keyboard.component.sass'],
 })
 export class KeyboardComponent {
-  // @Select(state => state.animals) animals$: Observable<any>;
-  currentKey = 'J';
+  currentzKey = 'J';
 
   keyRows = keys;
+  highlightKey = '';
 
-  constructor(private store: Store) {}
+  currentKey$: Observable<number[]>;
+  constructor(private store: Store) {
+    this.currentKey$ = this.store.select(
+      (state) => state.keyboard.currentKeys[0]
+    );
+    this.currentKey$.forEach((i) => {
+      this.highlightKey = typeof i === 'string' ? i : 'e';
+    });
+  }
 }
