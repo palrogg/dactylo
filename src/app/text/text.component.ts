@@ -1,8 +1,11 @@
 import { HostListener, Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ShowKey } from '../state/keyboard.actions'; // SendKeyCount
-// import { SendKeyCount, AddError } from '../state/text.actions';
-import { SendKey } from '../state/stats.state';
+import { ShowKey } from '../state/keyboard.actions';
+import {
+  SendWrongKey,
+  SendCorrectKey,
+  SetStartTime,
+} from '../state/stats.state';
 import texts from './texts.json';
 
 @Component({
@@ -11,7 +14,6 @@ import texts from './texts.json';
   styleUrls: ['./text.component.sass'],
 })
 export class TextComponent {
-  constructor(private store: Store) {}
   sentenceIndex = 0;
   characterIndex = 0;
 
@@ -28,11 +30,15 @@ export class TextComponent {
     this.characterIndex = 0;
     this.typedText = '';
     this.characters = this.currentSentence.replace(/ /g, '␣').split('');
+    this.store.dispatch([new SetStartTime()]);
+  }
+  constructor(private store: Store) {
+    this.loadSentence(0);
   }
   rightKey(): void {
     this.characterIndex += 1;
     this.store.dispatch([
-      // new SendKeyCount(this.characterIndex),
+      new SendCorrectKey(),
       new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
     if (this.characterIndex >= this.characters.length) {
@@ -46,9 +52,7 @@ export class TextComponent {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
-    // this.store.dispatch(new AddError('u'));
-    this.store.dispatch([new SendKey()]);
-
+    this.store.dispatch([new SendWrongKey()]);
   }
 
   testDiacritic(event: KeyboardEvent): void {

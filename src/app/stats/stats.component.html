@@ -1,10 +1,7 @@
 <div id="stats" class="ui component">
-    <div>
-        <p>Test Erreurs: {{errors$ | async}}</p>
-    </div>
     <mat-chip-set>
         <mat-chip class="stat" *ngFor="let stat of stats">
-            {{stat.text}}: <b>{{stat.value}}</b>{{stat.suffix}}
+            {{stat.text}}: <b>{{stat.value | async}}</b>{{stat.suffix}}
         </mat-chip>
     </mat-chip-set>
     <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>

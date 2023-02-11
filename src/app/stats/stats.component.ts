@@ -1,9 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { SendKeyCount } from '../state/text.actions';
-import { SendKey } from '../state/stats.state';
 
+interface Stat {
+  name: string;
+  text: string;
+  value: Observable<number[]>;
+  suffix: string;
+}
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -11,44 +15,41 @@ import { SendKey } from '../state/stats.state';
 })
 export class StatsComponent {
   errors$: Observable<number[]>;
-
+  accuracy$: Observable<number[]>;
+  speed$: Observable<number[]>;
+  charCount$: Observable<number[]>;
+  stats: Stat[] = [];
   @Input() errorCount?: number;
   constructor(private store: Store) {
     this.errors$ = this.store.select((state) => state.stats.errors);
-    console.log('>', this.errors$);
+    this.accuracy$ = this.store.select((state) => state.stats.accuracy);
+    this.speed$ = this.store.select((state) => state.stats.speed);
+    this.charCount$ = this.store.select((state) => state.stats.charCount);
+    this.stats = [
+      {
+        name: 'errors',
+        text: 'Nombre d’erreurs',
+        value: this.errors$,
+        suffix: '',
+      },
+      {
+        name: 'speed',
+        text: 'Vitesse',
+        value: this.speed$,
+        suffix: ' lettres par minute',
+      },
+      {
+        name: 'accuracy',
+        text: 'Précision',
+        value: this.accuracy$,
+        suffix: '%',
+      },
+      {
+        name: 'count',
+        text: 'Caractères entrés',
+        value: this.charCount$,
+        suffix: '',
+      },
+    ];
   }
-  keyCountDisplay?: number;
-
-  stats = [
-    {
-      name: 'speed',
-      text: 'Vitesse',
-      value: 200,
-      suffix: ' lettres par minute',
-    },
-    {
-      name: 'accuracy',
-      text: 'Précision',
-      value: 90,
-      suffix: '%',
-    },
-    {
-      name: 'errors',
-      text: 'Nombre d’erreurs',
-      value: this.errorCount ? this.errorCount : 0,
-      suffix: '',
-    },
-  ];
-
-  // SendKey() {
-  //   console.warn("yes")
-  //   this.store
-  //     .dispatch(new SendKey())
-  //     .subscribe((n) => (alert(n))); // this.keyCountDisplay = n
-  // }
-  // SendKeyCount(keyCount: number) {
-  //   this.store
-  //     .dispatch(new SendKeyCount(keyCount))
-  //     .subscribe((n) => (alert(n))); // this.keyCountDisplay = n
-  // }
 }
