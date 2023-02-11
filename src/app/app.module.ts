@@ -20,7 +20,8 @@ import { StatsComponent } from './stats/stats.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 import { ZooState } from './state/zoo.state';
-import { StatsState } from './state/stats.state'
+import { StatsState } from './state/stats.state';
+import { KeyboardState } from './state/keyboard.state';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { StatsState } from './state/stats.state'
     MatChipsModule,
     MatToolbarModule,
     // Store
-    NgxsModule.forRoot([ZooState, StatsState]),
+    NgxsModule.forRoot([ZooState, StatsState, KeyboardState]),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
