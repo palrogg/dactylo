@@ -13,14 +13,22 @@ export class KeyboardComponent {
 
   keyRows = keys;
   highlightKey = '';
+  highlightKeys: string[] = [];
 
-  currentKey$: Observable<number[]>;
+  currentKeys$: Observable<number[]>;
+
   constructor(private store: Store) {
-    this.currentKey$ = this.store.select(
-      (state) => state.keyboard.currentKeys[0]
+    this.currentKeys$ = this.store.select(
+      (state) => state.keyboard.currentKeys
     );
-    this.currentKey$.forEach((i) => {
-      this.highlightKey = typeof i === 'string' ? i : 'e';
+
+    this.currentKeys$.forEach((keys) => {
+      this.highlightKeys = [];
+      keys.forEach((i) => {
+        if (typeof i === 'string') {
+          this.highlightKeys.push(i);
+        }
+      });
     });
   }
 }
