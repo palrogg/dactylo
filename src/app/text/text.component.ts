@@ -90,6 +90,10 @@ export class TextComponent {
       if (event.code === 'Equal') {
         this.currentDiacriticCode = event.shiftKey ? 768 : 770; // ` vs ^
       }
+      // Diacritic ¨ on chfr keyboards
+      if (event.code === 'BracketRight') {
+        this.currentDiacriticCode = 776 // "ï".normalize('NFD').charCodeAt(1)
+      }
     } else if (this.currentDiacriticCode) {
       this.testDiacritic(event);
     } else if (
