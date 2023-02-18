@@ -19,10 +19,24 @@ export class KeyboardState {
   ShowKey(ctx: StateContext<KeyboardStateModel>, action: ShowKey) {
     const state = ctx.getState();
     let keys = [];
-    if (action.key === 'ô') {
-      keys = ['^', 'o'];
-    } else if(['à', 'é', 'è'].includes(action.key)){
-      keys.push(action.key)
+    if (['â', 'ê', 'î', 'ô', 'û'].includes(action.key)) {
+      keys = ['^'];
+      keys.push(
+        action.key
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toUpperCase()
+      );
+    } else if (['ä', 'ë', 'ï', 'ö', 'ü'].includes(action.key)) {
+      keys = ['¨'];
+      keys.push(
+        action.key
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toUpperCase()
+      );
+    } else if (['à', 'é', 'è'].includes(action.key)) {
+      keys.push(action.key);
     } else if (typeof action.key === 'string') {
       keys.push(action.key.toUpperCase());
     }
