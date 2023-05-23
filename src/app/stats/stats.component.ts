@@ -18,9 +18,11 @@ export class StatsComponent {
   accuracy$: Observable<number[]>;
   speed$: Observable<number[]>;
   charCount$: Observable<number[]>;
+  progress: number;
   stats: Stat[] = [];
   @Input() errorCount?: number;
   constructor(private store: Store) {
+    this.progress = 30;
     this.errors$ = this.store.select((state) => state.stats.errors);
     this.accuracy$ = this.store.select((state) => state.stats.accuracy);
     this.speed$ = this.store.select((state) => state.stats.speed);

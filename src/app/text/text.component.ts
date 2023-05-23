@@ -29,6 +29,10 @@ export class TextComponent {
     this.loadSentence(0);
   }
 
+  waitForFocus(): void {
+    alert("No more focus!!")
+  }
+
   loadSentence(index: number): void {
     this.currentSentence = this.text.sentences[index];
     this.characterIndex = 0;
