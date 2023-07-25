@@ -9,8 +9,6 @@ import keys from './keyboard.json';
   styleUrls: ['./keyboard.component.sass'],
 })
 export class KeyboardComponent {
-  currentzKey = 'J';
-
   keyRows = keys;
   highlightKey = '';
 
@@ -20,7 +18,7 @@ export class KeyboardComponent {
       (state) => state.keyboard.currentKeys[0]
     );
     this.currentKey$.forEach((i) => {
-      this.highlightKey = typeof i === 'string' ? i : 'e';
+      this.highlightKey = typeof i === 'string' ? i : '';
     });
   }
 }
