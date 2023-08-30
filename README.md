@@ -9,7 +9,18 @@ Projet d’outil d’entraînement à la dactylographie sur clavier romand.
 * clavier suisse-romand
 
 ## Étapes du projet
-[ ] Prototype: l’utilisatrice ou utilisateur peut s’entraîner avec un seul texte prédéfini
+
+### Dans le contexte du Capstone Project
+[x] Prototype: l’utilisatrice ou utilisateur peut s’entraîner avec un seul texte prédéfini
+[ ] Mesurer des paramètres permettant de classer les utilisateurs dans trois catégories
+    [ ] Quelles catégories: «débutant, moyen, avancé»? Ou «trop d’erreurs de frappe», «lenteur pour certains groupes de lettres»?
+    [ ] Mesures:
+        [ ] lettres entrées par erreur en contexte (à l’intérieur du mot / de la phrase)
+        [ ] lenteur en contexte (à l’intérieur du mot / de la phrase)
+        [ ] vitesse moyenne
+        [ ] taux d’erreur moyen
+
+### Dans le cadre de mon projet à long terme
 [ ] Elle ou il peut s’entraîner avec plusieurs textes et combinaisons de touches à choix
 [ ] Elle ou il peut charger son propre texte d’entraînement
 [ ] Sauvegarde de la progression en ligne
