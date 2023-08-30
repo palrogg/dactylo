@@ -1,4 +1,4 @@
-import { HostListener, Component } from '@angular/core';
+import { HostListener, Component, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ShowKey } from '../state/keyboard.actions';
 import {
@@ -24,9 +24,14 @@ export class TextComponent {
   currentDiacriticCode: number | null = null;
   wrongCharacters: Array<number> = [];
   errorCount = 0;
+  @Output() typingEvent = new EventEmitter<string>();
 
   constructor(private store: Store) {
     this.loadSentence(0);
+  }
+
+  sendTypingEvent(value: string) {
+    this.typingEvent.emit(value);
   }
 
   loadSentence(index: number): void {
@@ -37,6 +42,7 @@ export class TextComponent {
     this.store.dispatch([new SetStartTime(),
     new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
+    this.sendTypingEvent("sentence-loaded")
   }
 
   correctKey(): void {
@@ -51,12 +57,14 @@ export class TextComponent {
     }
   }
 
+
   wrongKey(): void {
     if (!this.wrongCharacters.includes(this.characterIndex)) {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
     this.store.dispatch([new SendWrongKey()]);
+    this.sendTypingEvent("wrong-key")
   }
 
   testDiacritic(event: KeyboardEvent): void {
