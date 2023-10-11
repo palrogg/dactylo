@@ -4,5 +4,5 @@
             {{stat.text}}: <b>{{stat.value | async}}</b>{{stat.suffix}}
         </mat-chip>
     </mat-chip-set>
-    <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="progression$ | async"></mat-progress-bar>
 </div>

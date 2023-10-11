@@ -5,6 +5,7 @@ import {
   SendWrongKey,
   SendCorrectKey,
   SetStartTime,
+  SetProgression,
 } from '../state/stats.state';
 import texts from './texts.json';
 
@@ -39,8 +40,10 @@ export class TextComponent {
     this.characterIndex = 0;
     this.typedText = '';
     this.characters = this.currentSentence.replace(/ /g, '␣').split('');
-    this.store.dispatch([new SetStartTime(),
-    new ShowKey(this.currentSentence[this.characterIndex]),
+    this.store.dispatch([
+      new SetStartTime(),
+      new ShowKey(this.currentSentence[this.characterIndex]),
+
     ]);
     this.sendTypingEvent("sentence-loaded")
   }
@@ -52,8 +55,16 @@ export class TextComponent {
       new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
     if (this.characterIndex >= this.characters.length) {
-      this.sentenceIndex++;
-      this.loadSentence(this.sentenceIndex);
+      // TODO: display something if all sentences were loaded.
+      if (this.sentenceIndex + 1 >= this.text.sentences.length) {
+        alert("C'est fini.")
+      } else {
+        this.sentenceIndex++;
+        this.store.dispatch([
+          new SetProgression(Math.ceil(100 * this.sentenceIndex / this.text.sentences.length))
+        ])
+        this.loadSentence(this.sentenceIndex);
+      }
     }
   }
 

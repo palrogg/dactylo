@@ -13,12 +13,17 @@ export class SendCorrectKey {
 export class SetStartTime {
   static readonly type = '[Stats] SetStartTime';
 }
+export class SetProgression {
+  static readonly type = '[Stats] SetProgression';
+  constructor(public newProgression: number) { }
+}
 
 export interface StatsStateModel {
   errors: number;
   speed: number;
   accuracy: number;
   charCount: number;
+  progression: number;
   startTime: Date; // Date: cf "sub state" example here https://www.ngxs.io/advanced/sub-states
 }
 
@@ -29,6 +34,7 @@ export interface StatsStateModel {
     speed: 0,
     accuracy: 0,
     charCount: 0,
+    progression: 0,
     startTime: new Date(),
   },
 })
@@ -67,6 +73,14 @@ export class StatsState {
       ...state,
       startTime: new Date(),
       charCount: 0,
+    });
+  }
+  @Action(SetProgression)
+  SetProgression(ctx: StateContext<StatsStateModel>, { newProgression }: SetProgression) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      progression: newProgression,
     });
   }
 }
