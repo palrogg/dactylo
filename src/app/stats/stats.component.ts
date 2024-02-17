@@ -14,6 +14,7 @@ interface Stat {
   styleUrls: ['./stats.component.sass'],
 })
 export class StatsComponent {
+  progression$: Observable<number>;
   errors$: Observable<number[]>;
   accuracy$: Observable<number[]>;
   speed$: Observable<number[]>;
@@ -21,6 +22,7 @@ export class StatsComponent {
   stats: Stat[] = [];
   @Input() errorCount?: number;
   constructor(private store: Store) {
+    this.progression$ = this.store.select((state) => state.stats.progression)
     this.errors$ = this.store.select((state) => state.stats.errors);
     this.accuracy$ = this.store.select((state) => state.stats.accuracy);
     this.speed$ = this.store.select((state) => state.stats.speed);
@@ -45,5 +47,6 @@ export class StatsComponent {
         suffix: '%',
       },
     ];
+
   }
 }
