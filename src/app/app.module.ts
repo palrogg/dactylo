@@ -19,7 +19,7 @@ import { KeyboardComponent } from './keyboard/keyboard.component';
 import { StatsComponent } from './stats/stats.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
-import { ZooState } from './state/zoo.state';
+import { ErrorDataState } from './state/errorData.state';
 import { StatsState } from './state/stats.state';
 import { KeyboardState } from './state/keyboard.state';
 
@@ -40,11 +40,11 @@ import { KeyboardState } from './state/keyboard.state';
     MatChipsModule,
     MatToolbarModule,
     // Store
-    NgxsModule.forRoot([ZooState, StatsState, KeyboardState]),
+    NgxsModule.forRoot([ErrorDataState, StatsState, KeyboardState]),
     NgxsLoggerPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

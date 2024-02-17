@@ -7,6 +7,7 @@ import {
   SetStartTime,
   SetProgression,
 } from '../state/stats.state';
+import { RecordError } from '../state/errorData.state'
 import texts from './texts.json';
 
 @Component({
@@ -68,13 +69,49 @@ export class TextComponent {
     }
   }
 
+  getLeftWordBoundary() {
+    for (let i = this.characterIndex; i >= 0; i--) {
+      console.log('[getLeftWordBoundary] Character at position', i, ': ', this.currentSentence[i])
+      if ([' ', '«', '"', '“'].includes(this.currentSentence[i])) {
+        return i
+      }
+    }
+    console.warn('leftwordboundary: not found :’( ')
+    return 0
+  }
 
-  wrongKey(): void {
+  getRightWordBoundary() {
+    for (let i = this.characterIndex; i < this.currentSentence.length; i++) {
+      console.log('[getRightWordBoundary] Character at position', i, ': ', this.currentSentence[i])
+      if ([' ', ':', '.', ',', '?', '!', '…', '«', '»', '"', '“', '”'].includes(this.currentSentence[i])) {
+        return i;
+      }
+    }
+    console.warn('rightwordboundray: not found :’( ')
+    return this.currentSentence.length
+  }
+
+  wrongKey(character: string): void {
+    for (let i = 5; i < 15; i++) { console.warn(i) }
+    const leftBoundary = this.getLeftWordBoundary()
+    const rightBoundary = this.getRightWordBoundary()
+    const word = this.currentSentence.slice(leftBoundary, rightBoundary)
     if (!this.wrongCharacters.includes(this.characterIndex)) {
       this.wrongCharacters.push(this.characterIndex);
     }
     this.errorCount++;
-    this.store.dispatch([new SendWrongKey()]);
+    this.store.dispatch([
+      new SendWrongKey(),
+      new RecordError({
+        character: character,
+        word: word, // WIP
+        indexInWord: this.characterIndex - leftBoundary, // WIP
+        sentence: this.currentSentence,
+        indexInSentence: this.characterIndex, // TODO
+        speed: 12, // TODO
+        latestErrorDistance: null, // TODO
+      }),
+    ]);
     this.sendTypingEvent("wrong-key")
   }
 
@@ -90,7 +127,7 @@ export class TextComponent {
     ) {
       this.correctKey();
     } else {
-      this.wrongKey();
+      this.wrongKey(event.key);
     }
     this.currentDiacriticCode = null;
   }
@@ -117,7 +154,7 @@ export class TextComponent {
       // F1... F12 keys: [...Array(13).keys()].map(i => "F"+i.toString())
       !['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab', 'Control', 'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'].includes(event.key)
     ) {
-      this.wrongKey();
+      this.wrongKey(event.key);
     }
   }
 }
