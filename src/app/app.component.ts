@@ -43,17 +43,11 @@ export class AppComponent {
 
 
   createAnimation(eventName: string) {
-    console.log(eventName)
     if (eventName === 'wrong-key') {
       this.shake = true
       setTimeout(() => {
         this.shake = false
       }, 300);
-
-      setTimeout(() => {
-        console.log('slide true!')
-        // this.slide = true
-      }, 500)
     } else if (eventName === 'sentence-loaded') {
       this.slide = true
       setTimeout(() => {
