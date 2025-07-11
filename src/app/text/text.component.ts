@@ -18,13 +18,14 @@ import texts from './texts.json';
 export class TextComponent {
   sentenceIndex = 0;
   characterIndex = 0;
-
+  lastCorrectKeystrokeMillis: number = new Date().valueOf();
   text = texts[0];
   currentSentence = this.text.sentences[0];
   typedText = '';
   characters = this.currentSentence.replace(/ /g, '␣').split('');
   currentDiacriticCode: number | null = null;
   wrongCharacters: Array<number> = [];
+  characterSpeeds: Array<number> = [];
   errorCount = 0;
   @Output() typingEvent = new EventEmitter<string>();
 
@@ -44,21 +45,26 @@ export class TextComponent {
     this.store.dispatch([
       new SetStartTime(),
       new ShowKey(this.currentSentence[this.characterIndex]),
-
     ]);
     this.sendTypingEvent("sentence-loaded")
   }
 
   correctKey(): void {
+    if (this.characterIndex === 0) {
+      this.lastCorrectKeystrokeMillis = new Date().valueOf();
+    } else {
+      this.characterSpeeds.push(new Date().valueOf() - this.lastCorrectKeystrokeMillis)
+      this.lastCorrectKeystrokeMillis = new Date().valueOf()
+    }
     this.characterIndex += 1;
     this.store.dispatch([
       new SendCorrectKey(),
       new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
     if (this.characterIndex >= this.characters.length) {
-      // TODO: display something if all sentences were loaded.
       if (this.sentenceIndex + 1 >= this.text.sentences.length) {
         alert("C'est fini.")
+        // TODO: display something if all sentences were loaded.
       } else {
         this.sentenceIndex++;
         this.store.dispatch([
@@ -73,7 +79,7 @@ export class TextComponent {
     for (let i = this.characterIndex; i >= 0; i--) {
       console.log('[getLeftWordBoundary] Character at position', i, ': ', this.currentSentence[i])
       if ([' ', '«', '"', '“'].includes(this.currentSentence[i])) {
-        return i
+        return i + 1
       }
     }
     console.warn('leftwordboundary: not found :’( ')
@@ -92,7 +98,6 @@ export class TextComponent {
   }
 
   wrongKey(character: string): void {
-    for (let i = 5; i < 15; i++) { console.warn(i) }
     const leftBoundary = this.getLeftWordBoundary()
     const rightBoundary = this.getRightWordBoundary()
     const word = this.currentSentence.slice(leftBoundary, rightBoundary)
@@ -104,12 +109,12 @@ export class TextComponent {
       new SendWrongKey(),
       new RecordError({
         character: character,
-        word: word, // WIP
-        indexInWord: this.characterIndex - leftBoundary, // WIP
+        word: word,
+        indexInWord: this.characterIndex - leftBoundary,
         sentence: this.currentSentence,
-        indexInSentence: this.characterIndex, // TODO
-        speed: 12, // TODO
-        latestErrorDistance: null, // TODO
+        indexInSentence: this.characterIndex,
+        speed: new Date().valueOf() - this.lastCorrectKeystrokeMillis,
+        latestErrorDistance: null, // TODO - OR we can compute it later using other error indexes
       }),
     ]);
     this.sendTypingEvent("wrong-key")

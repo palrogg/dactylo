@@ -17,6 +17,10 @@ export class SetProgression {
   static readonly type = '[Stats] SetProgression';
   constructor(public newProgression: number) { }
 }
+export class SetKeystrokeSpeeds {
+  static readonly type = '[Stats] SetKeystrokeSpeeds';
+  constructor(public newKeystrokeSpeeds: number[]) { }
+}
 
 export interface StatsStateModel {
   errors: number;
@@ -24,6 +28,7 @@ export interface StatsStateModel {
   accuracy: number;
   charCount: number;
   progression: number;
+  keystrokeSpeeds: number[];
   startTime: Date; // Date: cf "sub state" example here https://www.ngxs.io/advanced/sub-states
 }
 
@@ -35,6 +40,7 @@ export interface StatsStateModel {
     accuracy: 0,
     charCount: 0,
     progression: 0,
+    keystrokeSpeeds: [],
     startTime: new Date(),
   },
 })
@@ -81,6 +87,14 @@ export class StatsState {
     ctx.setState({
       ...state,
       progression: newProgression,
+    });
+  }
+  @Action(SetKeystrokeSpeeds)
+  SetKeystrokeSpeeds(ctx: StateContext<StatsStateModel>, { newKeystrokeSpeeds }: SetKeystrokeSpeeds) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      keystrokeSpeeds: newKeystrokeSpeeds,
     });
   }
 }
