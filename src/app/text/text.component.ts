@@ -33,6 +33,10 @@ export class TextComponent {
     this.loadSentence(0);
   }
 
+  waitForFocus(): void {
+    alert("No more focus!!")
+  }
+  
   sendTypingEvent(value: string) {
     this.typingEvent.emit(value);
   }
@@ -152,6 +156,10 @@ export class TextComponent {
       // Diacritic ^/` on chfr keyboards
       if (event.code === 'Equal') {
         this.currentDiacriticCode = event.shiftKey ? 768 : 770; // ` vs ^
+      }
+      // Diacritic ¨ on chfr keyboards
+      if (event.code === 'BracketRight') {
+        this.currentDiacriticCode = 776 // "ï".normalize('NFD').charCodeAt(1)
       }
     } else if (this.currentDiacriticCode) {
       this.testDiacritic(event);
