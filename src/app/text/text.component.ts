@@ -7,7 +7,7 @@ import {
   SetStartTime,
   SetProgression,
 } from '../state/stats.state';
-import { RecordError } from '../state/errorData.state'
+import { RecordError } from '../state/errorData.state';
 import texts from './texts.json';
 
 @Component({
@@ -33,10 +33,6 @@ export class TextComponent {
     this.loadSentence(0);
   }
 
-  waitForFocus(): void {
-    alert("No more focus!!")
-  }
-  
   sendTypingEvent(value: string) {
     this.typingEvent.emit(value);
   }
@@ -50,15 +46,17 @@ export class TextComponent {
       new SetStartTime(),
       new ShowKey(this.currentSentence[this.characterIndex]),
     ]);
-    this.sendTypingEvent("sentence-loaded")
+    this.sendTypingEvent('sentence-loaded');
   }
 
   correctKey(): void {
     if (this.characterIndex === 0) {
       this.lastCorrectKeystrokeMillis = new Date().valueOf();
     } else {
-      this.characterSpeeds.push(new Date().valueOf() - this.lastCorrectKeystrokeMillis)
-      this.lastCorrectKeystrokeMillis = new Date().valueOf()
+      this.characterSpeeds.push(
+        new Date().valueOf() - this.lastCorrectKeystrokeMillis
+      );
+      this.lastCorrectKeystrokeMillis = new Date().valueOf();
     }
     this.characterIndex += 1;
     this.store.dispatch([
@@ -67,13 +65,15 @@ export class TextComponent {
     ]);
     if (this.characterIndex >= this.characters.length) {
       if (this.sentenceIndex + 1 >= this.text.sentences.length) {
-        alert("C'est fini.")
+        alert("C'est fini.");
         // TODO: display something if all sentences were loaded.
       } else {
         this.sentenceIndex++;
         this.store.dispatch([
-          new SetProgression(Math.ceil(100 * this.sentenceIndex / this.text.sentences.length))
-        ])
+          new SetProgression(
+            Math.ceil((100 * this.sentenceIndex) / this.text.sentences.length)
+          ),
+        ]);
         this.loadSentence(this.sentenceIndex);
       }
     }
@@ -81,30 +81,44 @@ export class TextComponent {
 
   getLeftWordBoundary() {
     for (let i = this.characterIndex; i >= 0; i--) {
-      console.log('[getLeftWordBoundary] Character at position', i, ': ', this.currentSentence[i])
+      console.log(
+        '[getLeftWordBoundary] Character at position',
+        i,
+        ': ',
+        this.currentSentence[i]
+      );
       if ([' ', '«', '"', '“'].includes(this.currentSentence[i])) {
-        return i + 1
+        return i + 1;
       }
     }
-    console.warn('leftwordboundary: not found :’( ')
-    return 0
+    console.warn('leftwordboundary: not found :’( ');
+    return 0;
   }
 
   getRightWordBoundary() {
     for (let i = this.characterIndex; i < this.currentSentence.length; i++) {
-      console.log('[getRightWordBoundary] Character at position', i, ': ', this.currentSentence[i])
-      if ([' ', ':', '.', ',', '?', '!', '…', '«', '»', '"', '“', '”'].includes(this.currentSentence[i])) {
+      console.log(
+        '[getRightWordBoundary] Character at position',
+        i,
+        ': ',
+        this.currentSentence[i]
+      );
+      if (
+        [' ', ':', '.', ',', '?', '!', '…', '«', '»', '"', '“', '”'].includes(
+          this.currentSentence[i]
+        )
+      ) {
         return i;
       }
     }
-    console.warn('rightwordboundray: not found :’( ')
-    return this.currentSentence.length
+    console.warn('rightwordboundray: not found :’( ');
+    return this.currentSentence.length;
   }
 
   wrongKey(character: string): void {
-    const leftBoundary = this.getLeftWordBoundary()
-    const rightBoundary = this.getRightWordBoundary()
-    const word = this.currentSentence.slice(leftBoundary, rightBoundary)
+    const leftBoundary = this.getLeftWordBoundary();
+    const rightBoundary = this.getRightWordBoundary();
+    const word = this.currentSentence.slice(leftBoundary, rightBoundary);
     if (!this.wrongCharacters.includes(this.characterIndex)) {
       this.wrongCharacters.push(this.characterIndex);
     }
@@ -121,7 +135,7 @@ export class TextComponent {
         latestErrorDistance: null, // TODO - OR we can compute it later using other error indexes
       }),
     ]);
-    this.sendTypingEvent("wrong-key")
+    this.sendTypingEvent('wrong-key');
   }
 
   testDiacritic(event: KeyboardEvent): void {
@@ -143,6 +157,10 @@ export class TextComponent {
 
   @HostListener('document:keydown', ['$event'])
   onKeyUp(event: KeyboardEvent): void {
+    if (event.ctrlKey || event.metaKey) {
+      // Ignore Ctrl, Meta, Win and Cmd keys
+      return;
+    }
     if (event.code === 'Space') {
       // Prevent scrolldown
       event.preventDefault();
@@ -159,13 +177,33 @@ export class TextComponent {
       }
       // Diacritic ¨ on chfr keyboards
       if (event.code === 'BracketRight') {
-        this.currentDiacriticCode = 776 // "ï".normalize('NFD').charCodeAt(1)
+        this.currentDiacriticCode = 776; // "ï".normalize('NFD').charCodeAt(1)
       }
     } else if (this.currentDiacriticCode) {
       this.testDiacritic(event);
     } else if (
       // F1... F12 keys: [...Array(13).keys()].map(i => "F"+i.toString())
-      !['Shift', 'CapsLock', 'Alt', 'Meta', 'Tab', 'Control', 'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'].includes(event.key)
+      ![
+        'Shift',
+        'CapsLock',
+        'Alt',
+        'Meta',
+        'Tab',
+        'Control',
+        'Escape',
+        'F1',
+        'F2',
+        'F3',
+        'F4',
+        'F5',
+        'F6',
+        'F7',
+        'F8',
+        'F9',
+        'F10',
+        'F11',
+        'F12',
+      ].includes(event.key)
     ) {
       this.wrongKey(event.key);
     }
