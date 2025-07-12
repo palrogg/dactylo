@@ -39,8 +39,6 @@ export class AppComponent {
   title = 'Dactylo';
   shake = false
   slide = false
-  slidex = false
-
 
   createAnimation(eventName: string) {
     if (eventName === 'wrong-key') {
