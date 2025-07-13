@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext } from '@ngxs/store';
 
-export interface ZebraFood {
-  charCount: number;
-}
 export class SendWrongKey {
   static readonly type = '[Stats] SendWrongKey';
 }
