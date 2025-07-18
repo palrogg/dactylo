@@ -1,5 +1,43 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+##########################################
+### Laravel & PHPStorm
+##########################################
+
+*.log
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+user_API/.fleet
+user_API/.idea
+user_API/.nova
+user_API/.phpunit.cache
+user_API/.zed
+user_API/auth.json
+user_API/node_modules
+user_API/public/build
+user_API/public/hot
+user_API/public/storage
+user_API/storage/*.key
+user_API/storage/pail
+user_API/vendor
+user_API/Homestead.json
+user_API/Homestead.yaml
+user_API/Thumbs.db
+
+##########################################
+### Python
+##########################################
+
+# cache
+# checkpoints
+
+##########################################
+### Angular
+##########################################
+
 # Compiled output
 /dist
 /tmp
