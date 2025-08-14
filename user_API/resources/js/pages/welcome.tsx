@@ -1,9 +1,27 @@
+import { useState, useEffect } from 'react'
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import DactyloTrainer from './dactylo'
+import { TextList } from './textlist'
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
+    const [texts, setTexts] = useState<TextCollection|null>(null)
+
+    useEffect(() => {
+        // Test: fetch available texts from API-platform/Laravel
+        fetch(
+            'http://127.0.0.1:8000/api/texts'
+        )
+            .then((res) => res.json())
+            .then(setTexts)
+    }, [])
+
+     useEffect(() => {
+        // Test: fetch available texts from API-platform/Laravel
+        console.log(texts, texts?.member)
+    }, [texts])
+
 
     return (
         <>
@@ -46,6 +64,9 @@ export default function Welcome() {
                             <p className="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
                                 Un outil d’entraînement à la dactylo pour les claviers suisse-romands. [A migrer correctement depuis Angular]
                             </p>
+
+                            <TextList items={texts?.member || []} />
+
                             <DactyloTrainer />
                         </div>
                     </main>
